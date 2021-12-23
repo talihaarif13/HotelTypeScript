@@ -31,9 +31,9 @@ module.exports.createReservation = async (req, res) => {
                 }
             });
             res.status(200).json(reservation);
+        }else{
+            res.status(200).json({err : "already exist"});
         }
-        res.status(200).json({err : "already exist"});
-        
     }catch(err){
         console.log(err);
         res.status(500).json({'error' : err });
