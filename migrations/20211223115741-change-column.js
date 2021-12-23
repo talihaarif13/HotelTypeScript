@@ -25,6 +25,7 @@ module.exports = {
           name:'unique_customer_email'
         })
       });
+      
   },
 
   down: async (queryInterface, Sequelize) => {

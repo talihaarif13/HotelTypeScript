@@ -2,10 +2,16 @@ const customerModel = require('../models').customer;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const reservationModel = require('../models').Reservation;
-const roomModel = require('../models').room;
+const { validationResult } = require('express-validator');
+
 
 module.exports.signup = async(req, res)  => {
     try{
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            res.status(422).json({ errors: errors.array() });
+            return;
+        }
         const salt = await bcrypt.genSalt(10);
         const hashed_password = await bcrypt.hash(req.body.password.toString(), salt);
         const user = await customerModel.create({
@@ -68,7 +74,7 @@ module.exports.fetchUserReservations = async(req, res )=>{
     try{
         let user_reservations = await reservationModel.findAll({
             where : {
-                customer_id : req.body.user_id
+                customer_id : req.data.user_id
             }
         });
         res.status(200).json(user_reservations);
@@ -82,4 +88,5 @@ module.exports.fetchUserReservations = async(req, res )=>{
         // }
     }
 }
+
 
