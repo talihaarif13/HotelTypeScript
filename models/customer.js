@@ -16,8 +16,19 @@ module.exports = (sequelize, DataTypes) => {
   };
   customer.init({
     name: DataTypes.STRING,
-    email: DataTypes.TEXT,
-    password: DataTypes.STRING,
+    email: {
+      type : DataTypes.TEXT,
+      validate : {
+        isEmail : true
+      }
+    },
+    password: {
+      type : DataTypes.STRING,
+      allowNull:false,
+      validate:{
+        len: [5,100]
+      }
+    },
     address: DataTypes.TEXT,
     phone: DataTypes.TEXT
   }, {

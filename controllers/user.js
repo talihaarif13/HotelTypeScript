@@ -19,11 +19,11 @@ module.exports.signup = async(req, res)  => {
     }catch(err){
         console.log(err);
         res.status(500).json({'error' : err });
-        // if(err instanceof ValidationError){
-        //     res.status(400).json({'error' : err.errors[0].message})
-        // }else{
-        //     res.status(500).json({'error' : err });
-        // }
+        if(err instanceof ValidationError){
+            res.status(400).json({'error' : err.errors[0].message})
+        }else{
+            res.status(500).json({'error' : err });
+        }
     }
 }
 module.exports.login = async(req,res) => {
