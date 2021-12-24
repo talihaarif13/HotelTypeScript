@@ -16,7 +16,14 @@ module.exports = (sequelize, DataTypes) => {
   };
   Hotel.init({
     name: DataTypes.STRING,
-    address: DataTypes.TEXT
+    address: DataTypes.TEXT,
+    picture : {
+      type : DataTypes.STRING,
+      get() {
+        const rawValue = this.getDataValue('picture');
+        return rawValue ? "http://127.0.0.1:3000/" + rawValue : null;
+      }
+    }
   }, {
     sequelize,
     modelName: 'Hotel',

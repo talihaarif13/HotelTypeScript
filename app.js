@@ -9,6 +9,8 @@ const serviceRoutes = require('./routes/services');
 
 
 
+
+app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

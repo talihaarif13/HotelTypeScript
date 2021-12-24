@@ -4,9 +4,11 @@ const {ValidationError} = require('sequelize');
 module.exports.createHotel = async (req, res, next) => {
     try{
         console.log('com2');
+        console.log(req.file);
         let hotel = await hotelModel.create({
-            'name' : req.body.name,
-            'address' : req.body.address
+            name : req.body.name,
+            address : req.body.address,
+            picture : req.file.path
         });
         res.status(200).json(hotel);
     }catch(err){
