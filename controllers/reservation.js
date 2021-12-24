@@ -3,6 +3,11 @@ const roomModel = require('../models').room;
 
 module.exports.createReservation = async (req, res) => {
     try{
+        let room = await roomModel.findByPk(req.body.room_id);
+        if(!room){
+            res.status(400).json({error : "room does not exists"});
+            return;
+        }
         console.log("user_id", req.data);
         let exist_reservation = await reservationModel.findOne({
             where : {
@@ -20,7 +25,7 @@ module.exports.createReservation = async (req, res) => {
             // let customer = await customerModel.findByPk(req.data.user_id);
             // console.log("customer", customer);
             // await customer.addReservation(reservation);
-            let room = await roomModel.findByPk(req.body.room_id);
+            
             await room.setReservation(reservation);
             //update status of reserved room
             let room_status = await roomModel.update({
@@ -37,11 +42,6 @@ module.exports.createReservation = async (req, res) => {
     }catch(err){
         console.log(err);
         res.status(500).json({'error' : err });
-        // if(err instanceof ValidationError){
-        //     res.status(400).json({'error' : err.errors[0].message})
-        // }else{
-        //     res.status(500).json({'error' : err });
-        // }
     }
 };
 module.exports.updateReservation = async(req, res) => {
@@ -64,11 +64,6 @@ module.exports.updateReservation = async(req, res) => {
     }catch(err){
         console.log(err);
         res.status(500).json({'error' : err });
-        // if(err instanceof ValidationError){
-        //     res.status(400).json({'error' : err.errors[0].message})
-        // }else{
-        //     res.status(500).json({'error' : err });
-        // }
     }
 }
 module.exports.deleteSpecificRoomReservation = async(req,res) => {
@@ -90,11 +85,6 @@ module.exports.deleteSpecificRoomReservation = async(req,res) => {
     }catch(err){
         console.log(err);
         res.status(500).json({'error' : err });
-        // if(err instanceof ValidationError){
-        //     res.status(400).json({'error' : err.errors[0].message})
-        // }else{
-        //     res.status(500).json({'error' : err });
-        // }
     }
 }
 module.exports.deleteUserAllReservation = async(req, res) => {
@@ -120,10 +110,5 @@ module.exports.deleteUserAllReservation = async(req, res) => {
     }catch(err){
         console.log(err);
         res.status(500).json({'error' : err });
-        // if(err instanceof ValidationError){
-        //     res.status(400).json({'error' : err.errors[0].message})
-        // }else{
-        //     res.status(500).json({'error' : err });
-        // }
     }
 }

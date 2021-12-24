@@ -23,17 +23,16 @@ module.exports.addRoomService = async(req, res) => {
     try{
         let room = await roomModel.findByPk(req.body.room_id);
         let service = await serviceModel.findByPk(req.body.service_id);
+        if(!room || !service){
+            res.status(400).json({error : "not valid data"});
+            return;
+        }
         const result = await room.addServices(service);
         console.log('res', result);
         res.status(200).json("ok");
     }catch(err){
         console.log(err);
         res.status(500).json({'error' : err });
-        // if(err instanceof ValidationError){
-        //     res.status(400).json({'error' : err.errors[0].message})
-        // }else{
-        //     res.status(500).json({'error' : err });
-        // }
     }
 };
 module.exports.fetchRoomServices = async(req,res) => {
@@ -51,11 +50,6 @@ module.exports.fetchRoomServices = async(req,res) => {
     }catch(err){
         console.log(err);
         res.status(500).json({'error' : err });
-        // if(err instanceof ValidationError){
-        //     res.status(400).json({'error' : err.errors[0].message})
-        // }else{
-        //     res.status(500).json({'error' : err });
-        // }
     }
 }
 module.exports.deleteService = async(req, res) => {
@@ -69,10 +63,5 @@ module.exports.deleteService = async(req, res) => {
     }catch(err){
         console.log(err);
         res.status(500).json({'error' : err });
-        // if(err instanceof ValidationError){
-        //     res.status(400).json({'error' : err.errors[0].message})
-        // }else{
-        //     res.status(500).json({'error' : err });
-        // }
     }
 }

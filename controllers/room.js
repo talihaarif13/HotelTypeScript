@@ -9,26 +9,25 @@ module.exports.createRoom = async(req, res) => {
             res.status(422).json({ errors: errors.array() });
             return;
         }
-        let room = await roomModel.create({
-            'status': "available",
-            "price" : req.body.price
-        });
-        //create hotel association
         let hotel = await hotelModel.findOne({
             where : {
                 id : req.body.hotel_id
             }
         });
+        if(!hotel){
+            res.status(400).json({ error : "hotel does not exists" });
+            return;
+        }
+        let room = await roomModel.create({
+            'status': "available",
+            "price" : req.body.price
+        });
+        //create hotel association
         await room.setHotel(hotel);
         res.status(200).json('done');
     }catch(err){
         console.log(err);
         res.status(500).json({'error' : err });
-        // if(err instanceof ValidationError){
-        //     res.status(400).json({'error' : err.errors[0].message})
-        // }else{
-        //     res.status(500).json({'error' : err });
-        // }
     }
 };
 module.exports.getHotelRooms = async (req,res) => {

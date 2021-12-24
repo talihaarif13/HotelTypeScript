@@ -14,12 +14,6 @@ module.exports = {
       address: {
         type: Sequelize.TEXT
       },
-      total_rooms: {
-        type: Sequelize.INTEGER
-      },
-      available_rooms: {
-        type: Sequelize.INTEGER
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
