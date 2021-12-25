@@ -9,7 +9,7 @@ module.exports.signup = async(req, res)  => {
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            res.status(422).json({ errors: errors.array() });
+            res.status(400).json({ errors: errors.array() });
             return;
         }
         const salt = await bcrypt.genSalt(10);

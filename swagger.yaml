@@ -1,0 +1,396 @@
+swagger: "2.0"
+info:
+  description: "Hotel CRUD based on MVC using node.js and express. Basic implementation of user, hotel, room, room services and reservation."
+  version: "1.0.0"
+  title: "Hotel CRUD"
+host: "127.0.0.1:3000/"
+# basePath: "/v2"
+tags:
+- name: "hotel"
+  description: "Everything about hotel"
+- name: "reservation"
+  description: "Operations about reservation"
+- name: "user"
+  description: "Operations about user"
+schemes:
+- "http"
+paths:
+  /user/signup:
+    post:
+      tags:
+      - "user"
+      summary: "Create a user"
+      description: ""
+      operationId: "addUser"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "User object that needs to be added"
+        required: true
+        schema:
+          $ref: "#/definitions/SignUp"
+      responses:
+        "200":
+          description: "Created User Successfully"
+        "400":
+          description: "Invalid Data"
+  /user/login:
+    post:
+      tags:
+      - "user"
+      summary: "Login user in order to make reservation."
+      description: ""
+      operationId: "userLogin"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "body"
+        in: "body"
+        description: "User data to login."
+        required: true
+        schema:
+          $ref: "#/definitions/Login"
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/LoginResponse"
+        "400":
+          description: "Invalid Data"
+  /user/fetchReservations:
+    get:
+      tags:
+      - "user"
+      summary: "Find User Reservations"
+      description: ""
+      operationId: "fetchUserReservations"
+      produces:
+      - "application/json"
+      parameters:
+        - name: token
+          in: header
+          type: string
+          required: true
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/FetchReservationsResponse"
+        "400":
+          description: "Invalid data"
+  /hotel/:
+    post:
+      tags:
+      - "hotel"
+      summary: "Create a hotel"
+      description: ""
+      operationId: "hotelCreate"
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "formData"
+        description: "Name of the hotel"
+        required: false
+        type: "string"
+      - name: token
+        in: header
+        type: string
+        required: true
+      - name: "address"
+        in: "formData"
+        description: "Address of the hotel"
+        required: false
+        type: "string"
+      - name: "picture"
+        in: "formData"
+        description: "Picture to upload of hotel"
+        required: false
+        type: "file"
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/CreateHotelResponse"
+    put:
+      tags:
+      - "hotel"
+      summary: "Updates a hotel with form data"
+      description: ""
+      operationId: "updateHotelWithForm"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "body"
+        description: "ID of hotel that needs to be updated"
+        required: true
+        type: "integer"
+      - name: token
+        in: header
+        type: string
+        required: true
+      - name: "name"
+        in: "body"
+        description: "Updated name of the hotel"
+        required: false
+        type: "string"
+      - name: "address"
+        in: "body"
+        description: "Updated address of the hotel"
+        required: false
+        type: "string"
+      responses:
+        "200":
+          description: "Successfully updated"
+    delete:
+      tags:
+      - "hotel"
+      summary: "Deletes a hotel"
+      description: ""
+      operationId: "deleteHotel"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "body"
+        description: "Hotel id to delete"
+        required: true
+        type: "integer"
+      - name: token
+        in: header
+        type: string
+        required: true
+      responses:
+        "200":
+          description: "Successfully deleted"
+    get:
+      tags:
+      - "hotel"
+      summary: "Fetch all hotels"
+      description: ""
+      operationId: "getHotels"
+      produces:
+      - "application/json"
+      parameters:
+        - name: token
+          in: header
+          type: string
+          required: true
+      responses:
+        "200":
+          description: "List of all hotels"
+          schema:
+            $ref: "#/definitions/FetchHotelResponse"
+  /reservation/:
+    post:
+      tags:
+      - "reservation"
+      summary: "User make a reservation of a room"
+      description: ""
+      operationId: "createReservation"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "starting_date"
+        in: "body"
+        description: "Starting date of reservation"
+        required: false
+        type: "string"
+        format: "YYYY-MM-DD"
+      - name: token
+        in: header
+        type: string
+        required: true
+      - name: "ending_date"
+        in: "body"
+        description: "Starting date of reservation"
+        required: false
+        type: "string"
+        format: "YYYY-MM-DD"
+      - name: "room_id"
+        in: "body"
+        description: "ID of the room"
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/CreateReservationResponse"
+    put:
+      tags:
+      - "reservation"
+      summary: "Update starting/ending date of reservation"
+      description: ""
+      operationId: "updateReservation"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        type: "string"
+        name: "starting_date"
+        description: "Starting date to update"
+        required: false
+      - name: token
+        in: header
+        type: string
+        required: true
+      - in: "body"
+        type: "string"
+        name: "ending_date"
+        description: "Ending date to update"
+        required: false
+      - in: "body"
+        type: "integer"
+        name: "room_id"
+        description: "ID of the room for which updating the reservation"
+        required: true
+      responses:
+        "200":
+          description: "successful operation"
+        "400":
+          description: "Invalid Order"
+  /reservation/deleteReservation:
+    delete:
+      tags:
+      - "reservation"
+      summary: "Deletes/Cancel user's all reservations"
+      description: ""
+      operationId: "deleteAllReservation"
+      produces:
+      - "application/json"
+      parameters:
+        - name: token
+          in: header
+          type: string
+          required: true
+      responses:
+        "200":
+          description: "Successfully deleted"
+  /reservation/deleteSpecific:
+    delete:
+      tags:
+      - "reservation"
+      summary: "Deletes/Cancel a specific reservation"
+      description: ""
+      operationId: "deleteReservation"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "body"
+        description: "Reservation id to delete"
+        required: true
+        type: "integer"
+      - name: token
+        in: header
+        type: string
+        required: true
+      responses:
+        "200":
+          description: "Successfully deleted"
+definitions:
+  CreateReservationResponse:
+    type: object
+    properties:
+        id:
+          type: integer
+          example: 1
+        starting_date:
+          type: string
+          example: "2021-12-01T00:00:00.000Z"
+        ending_date:
+          type: string
+          example: "2021-12-01T00:00:00.000Z"
+        customer_id:
+          type: integer
+          example: 3
+        createdAt:
+          type: integer
+          example: "2021-12-01T00:00:00.000Z"
+        updatedAt:
+          type: integer
+          example: "2021-12-01T00:00:00.000Z"
+        room_id:
+          type: integer
+          example: 2
+  SignUp:
+    type: "object"
+    required:
+    - "email"
+    - "password"
+    properties:
+      email:
+        type: "string"
+        format: "email"
+      password:
+        type: "string"
+      name:
+        type: "text"
+        example: "doggie"
+      phone:
+        type: "string"
+      address:
+        type: "string"
+  Login:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+        format: "Email"
+      password:
+        type: "string"
+  FetchReservationsResponse:
+    type: "array"
+    items:
+      $ref: '#/definitions/CreateReservationResponse'
+  FetchHotelResponse:
+    type: "array"
+    items:
+      $ref: '#/definitions/CreateHotelResponse'
+  LoginResponse:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      name:
+        type: "string"
+      email:
+        type: "string"
+      address:
+        type: "string"
+      phone:
+        type: "string"
+      createdAt:
+        type: "string"
+      updatedAt:
+        type: "string"
+      token:
+        type: "string"
+  CreateHotelResponse:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      name:
+        type: "string"
+      address:
+        type: "string"
+      picture:
+        type: string
+        format: binary
+      createdAt:
+        type: "string"
+      updatedAt:
+        type: "string"
