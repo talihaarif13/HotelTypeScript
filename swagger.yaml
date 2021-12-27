@@ -12,6 +12,8 @@ tags:
   description: "Operations about reservation"
 - name: "user"
   description: "Operations about user"
+- name: "room"
+  description: "Everything about room"
 schemes:
 - "http"
 paths:
@@ -300,6 +302,84 @@ paths:
       responses:
         "200":
           description: "Successfully deleted"
+  /room/:
+    post:
+      tags:
+      - "room"
+      summary: "Create a room in hotel"
+      description: ""
+      operationId: "createRoom"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "price"
+        in: "body"
+        description: "Price of the room"
+        required: true
+        type: "integer"
+      - name: hotel_id
+        in: body
+        description: "ID of the hotel to create a room in it"
+        type: integer
+        required: true
+      - name: token
+        in: header
+        type: string
+        required: true
+      responses:
+        "200":
+          description: "Successfully Added"
+    put:
+      tags:
+      - "room"
+      summary: "Update a room in hotel"
+      description: ""
+      operationId: "updateRoom"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "price"
+        in: "body"
+        description: "Price of the room"
+        required: false
+        type: "integer"
+      - name: token
+        in: header
+        type: string
+        required: true
+      - name: room_id
+        in: body
+        description: "ID of the room to be updated"
+        type: integer
+        required: true
+      responses:
+        "200":
+          description: "Successfully updated"
+          schema:
+            $ref: "#/definitions/CreateRoomResponse"
+    get:
+      tags:
+      - "room"
+      summary: "Fetch rooms of a hotel"
+      description: ""
+      operationId: "fetchRooms"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "hotel_id"
+        in: "body"
+        description: "ID of the hotel to get its rooms"
+        required: true
+        type: "integer"
+      - name: token
+        in: header
+        type: string
+        required: true
+      responses:
+        "200":
+          description: "List of rooms in a hotel"
+          schema:
+            $ref: "#/definitions/FetchRoomResponse"
 definitions:
   CreateReservationResponse:
     type: object
@@ -359,6 +439,10 @@ definitions:
     type: "array"
     items:
       $ref: '#/definitions/CreateHotelResponse'
+  FetchRoomResponse:
+    type: "array"
+    items:
+      $ref: '#/definitions/CreateRoomResponse'
   LoginResponse:
     type: "object"
     properties:
@@ -390,6 +474,21 @@ definitions:
       picture:
         type: string
         format: binary
+      createdAt:
+        type: "string"
+      updatedAt:
+        type: "string"
+  CreateRoomResponse:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      status:
+        type: "string"
+      price:
+        type: "integer"
+      hotel_id:
+        type: integer
       createdAt:
         type: "string"
       updatedAt:
