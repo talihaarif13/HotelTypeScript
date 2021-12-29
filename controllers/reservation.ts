@@ -1,7 +1,8 @@
+import { Request, Response } from "express";
 const reservationModel = require('../models').Reservation;
 const roomModel = require('../models').room;
 
-module.exports.createReservation = async (req, res) => {
+module.exports.createReservation = async (req:any, res:Response) => {
     try{
         let room = await roomModel.findByPk(req.body.room_id);
         if(!room){
@@ -44,9 +45,9 @@ module.exports.createReservation = async (req, res) => {
         res.status(500).json({'error' : err });
     }
 };
-module.exports.updateReservation = async(req, res) => {
+module.exports.updateReservation = async(req:any, res:Response) => {
     try{
-        let update_data = {};
+        let update_data : any = {};
         if(req.body.starting_date){
             update_data.starting_date = req.body.starting_date;
         }
@@ -66,7 +67,7 @@ module.exports.updateReservation = async(req, res) => {
         res.status(500).json({'error' : err });
     }
 }
-module.exports.deleteSpecificRoomReservation = async(req,res) => {
+module.exports.deleteSpecificRoomReservation = async(req:any, res:Response) => {
     try{
         let update_room_status = await roomModel.update({
             status : "available"
@@ -87,7 +88,7 @@ module.exports.deleteSpecificRoomReservation = async(req,res) => {
         res.status(500).json({'error' : err });
     }
 }
-module.exports.deleteUserAllReservation = async(req, res) => {
+module.exports.deleteUserAllReservation = async(req:any, res:Response) => {
     try{
         let reserved_user_rooms = await reservationModel.findAll({
             where : {
@@ -95,8 +96,8 @@ module.exports.deleteUserAllReservation = async(req, res) => {
             },
             attributes : ['room_id'],
         });
-        const arr =[];
-        reserved_user_rooms.forEach(room => {
+        const arr : any =[];
+        reserved_user_rooms.forEach(( room: any )=> {
             arr.push(room['room_id']) ;
         })
         await roomModel.update({status : 'available'}, { where : { id : arr } });

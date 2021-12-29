@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 const customerModel = require('../models').customer;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -5,7 +6,7 @@ const reservationModel = require('../models').Reservation;
 const { validationResult } = require('express-validator');
 const {ValidationError} = require('sequelize');
 
-module.exports.signup = async(req, res)  => {
+module.exports.signup = async(req:any, res:Response)  => {
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -22,7 +23,7 @@ module.exports.signup = async(req, res)  => {
             'phone' : req.body.phone
         });
         res.status(200).json(user);
-    }catch(err){
+    }catch(err: Error | any){
         console.log(err);
         if(err instanceof ValidationError){
             res.status(400).json({'error' : err.errors[0].message})
@@ -31,7 +32,7 @@ module.exports.signup = async(req, res)  => {
         }
     }
 }
-module.exports.login = async(req,res) => {
+module.exports.login = async(req:any, res:Response) => {
     try{
         if(req.body.email && req.body.password){
             let user = await customerModel.findOne({
@@ -64,7 +65,7 @@ module.exports.login = async(req,res) => {
         res.status(500).json({'error' : err });
     }
 }
-module.exports.fetchUserReservations = async(req, res )=>{
+module.exports.fetchUserReservations = async(req:any, res:Response)=>{
     try{
         let user_reservations = await reservationModel.findAll({
             where : {

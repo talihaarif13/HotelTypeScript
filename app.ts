@@ -1,4 +1,6 @@
-const express = require('express');
+import { Request, Response } from "express";
+
+import express from "express";
 const app = express()
 var bodyParser = require("body-parser");
 const hotelRoutes = require('./routes/hotel');
@@ -36,23 +38,23 @@ const path = require('path');
 const admzip = require('adm-zip');
 
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
+    destination: function(req: any, file: any, cb:any) {
         cb(null, 'uploads');
     },
 
     // By default, multer removes file extensions so let's add them back
-    filename: function(req, file, cb) {
+    filename: function(req: any, file:any, cb:any) {
         cb(null, Date.now() + path.extname(file.originalname));
     }
 });
 
 let upload = multer({ storage: storage});
 
-app.post("/file/zip", upload.array("documents", 5), (req, res) => {
+app.post("/file/zip", upload.array("documents", 5), (req:any, res:Response) => {
     var zip = new admzip();
     var outputFilePath = Date.now() + "output.zip";
     if (req.files) {
-        req.files.forEach((file) => {
+        req.files.forEach((file: any) => {
             console.log(file.path)
             zip.addLocalFile(file.path)
         });

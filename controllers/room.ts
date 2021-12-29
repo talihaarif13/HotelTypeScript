@@ -1,8 +1,9 @@
+import { Request, Response } from "express";
 const roomModel = require('../models').room;
 const hotelModel = require('../models').Hotel;
 const { validationResult } = require('express-validator');
 
-module.exports.createRoom = async(req, res) => {
+module.exports.createRoom = async(req:any, res:Response) => {
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -30,7 +31,7 @@ module.exports.createRoom = async(req, res) => {
         res.status(500).json({'error' : err });
     }
 };
-module.exports.getHotelRooms = async (req,res) => {
+module.exports.getHotelRooms = async (req:any,res:Response) => {
     try{
         let hotel_rooms = await roomModel.findAll({
             where: {
@@ -48,14 +49,14 @@ module.exports.getHotelRooms = async (req,res) => {
         // }
     }
 };
-module.exports.updateHotelRoom = async (req, res) => {
+module.exports.updateHotelRoom = async (req:any, res:Response) => {
     try{
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             res.status(422).json({ errors: errors.array() });
             return;
         }
-        let update_data = {};
+        let update_data : any = {};
         if(req.body.price){
             update_data.price = req.body.price;
         }

@@ -1,4 +1,4 @@
-const express = require("express");
+import express from "express";
 var router = express.Router();
 const roomController = require('../controllers/room');
 const formValidation = require('../validations/formValidation');
